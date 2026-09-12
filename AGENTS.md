@@ -1,87 +1,47 @@
-# CLAUDE.md
+# mikeldev.com agent guide
 
-Behavioral guidelines to reduce common LLM coding mistakes. Merge with project-specific instructions as needed.
+Astro portfolio with Tailwind, GSAP and a server-side Resend contact endpoint.
+Use pnpm and the `packageManager` pin in `package.json`. Deployment configuration is
+in `astro.config.mjs` and `wrangler.jsonc`; do not infer it from older README badges.
 
-**Tradeoff:** These guidelines bias toward caution over speed. For trivial tasks, use judgment.
+## Task context
 
-## 1. Think Before Coding
+- For layout or branding, use the affected Astro page/components, shared styles and
+  `PRODUCT.md` where it informs the requested design decision.
+- For contact delivery, inspect the existing endpoint and `.env.example`; preserve
+  server-side validation, escaped user content and private credentials.
+- Load `.agents/skills/impeccable` for design work, `resend` for SDK/API work and
+  `resend-cli` for terminal operations. `react-email` applies only to React Email
+  templates/editor work; it is not a reason to migrate direct HTML emails.
+- Prefer existing components and native features; keep changes scoped to the task.
 
-**Don't assume. Don't hide confusion. Surface tradeoffs.**
+## Decisions and completion
 
-Before implementing:
+Resolve routine, reversible choices from the task and repository evidence; state only
+assumptions that materially affect the result. Ask when missing information changes
+the product outcome, public contract, data safety or authorization and cannot be inferred.
+Continue implementation, relevant verification and fixes caused by the change until
+the requested outcome is complete. A first draft is not a review gate unless requested.
 
-- State your assumptions explicitly. If uncertain, ask.
-- If multiple interpretations exist, present them - don't pick silently.
-- If a simpler approach exists, say so. Push back when warranted.
-- If something is unclear, stop. Name what's confusing. Ask.
+Local edits, focused checks and scoped fixes need no repeated approval. Remote writes,
+sends, deployments, destructive operations and credential changes must be within the
+user's authorization for the named target; ask only for missing authorization. Permission
+to commit or push does not also authorize deployment or unrelated changes.
+Preserve unrelated user work and do not bypass hooks or force-push.
 
-## 2. Simplicity First
+## Validation and commits
 
-**Minimum code that solves the problem. Nothing speculative.**
+For documentation-only changes, review claims and links and run `git diff --check`.
+For code, select checks for the affected behavior and risk. A passing combined gate
+covers its constituent checks; rerun only after relevant changes or to investigate a
+failure. Report checks actually run and any blocker; do not call skipped checks passed.
 
-- No features beyond what was asked.
-- No abstractions for single-use code.
-- No "flexibility" or "configurability" that wasn't requested.
-- No error handling for impossible scenarios.
-- If you write 200 lines and it could be 50, rewrite it.
+`pnpm test` runs the Node tests. `pnpm build` includes those tests, Astro checks and
+the build. Use `pnpm check` for Astro diagnostics and targeted Prettier checks for
+formatting. `pnpm verify:agents` is a public-site/API readiness check, not a validator
+for these instruction files; inspect its target before running it.
 
-Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify.
-
-## 3. Surgical Changes
-
-**Touch only what you must. Clean up only your own mess.**
-
-When editing existing code:
-
-- Don't "improve" adjacent code, comments, or formatting.
-- Don't refactor things that aren't broken.
-- Match existing style, even if you'd do it differently.
-- If you notice unrelated dead code, mention it - don't delete it.
-
-When your changes create orphans:
-
-- Remove imports/variables/functions that YOUR changes made unused.
-- Don't remove pre-existing dead code unless asked.
-
-The test: Every changed line should trace directly to the user's request.
-
-## 4. Goal-Driven Execution
-
-**Define success criteria. Loop until verified.**
-
-Transform tasks into verifiable goals:
-
-- "Add validation" → "Write tests for invalid inputs, then make them pass"
-- "Fix the bug" → "Write a test that reproduces it, then make it pass"
-- "Refactor X" → "Ensure tests pass before and after"
-
-For multi-step tasks, state a brief plan:
-
-```
-1. [Step] → verify: [check]
-2. [Step] → verify: [check]
-3. [Step] → verify: [check]
-```
-
-Strong success criteria let you loop independently. Weak criteria ("make it work") require constant clarification.
-
----
-
-**These guidelines are working if:** fewer unnecessary changes in diffs, fewer rewrites due to overcomplication, and clarifying questions come before implementation rather than after mistakes.
-
-## 5. Repository Workflow
-
-Use pnpm for package management and project scripts.
-
-Before committing:
-
-- Keep commits atomic: one logical change per commit.
-- Use Conventional Commits: `<type>[optional scope]: <description>`.
-- Preferred types: `feat`, `fix`, `docs`, `style`, `refactor`, `perf`, `test`, `build`, `ci`, `chore`.
-- Examples: `feat(layout): add responsive header`, `fix(navbar): correct mobile overflow`, `chore: configure husky hooks`.
-
-Local hooks:
-
-- `pre-commit`: runs `pnpm lint-staged` to format staged files with Prettier.
-- `commit-msg`: runs Commitlint and rejects non-Conventional Commit messages.
-- `pre-push`: runs `pnpm build`, which includes `astro check && astro build`.
+Use atomic Conventional Commits in English. Versioned Husky hooks format staged files
+with `pnpm lint-staged`, validate messages with Commitlint, and run `pnpm build` before
+push. Respect configured hooks; when delivering from a fresh checkout, install with
+`pnpm install --frozen-lockfile` to activate them.

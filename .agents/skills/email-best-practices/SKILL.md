@@ -1,6 +1,6 @@
 ---
 name: email-best-practices
-description: Use when building email features, emails going to spam, high bounce rates, setting up SPF/DKIM/DMARC authentication, implementing email capture, ensuring compliance (CAN-SPAM, GDPR, CASL), handling webhooks, retry logic, making emails accessible (alt text, headings, contrast, screen readers), or deciding transactional vs marketing.
+description: "Diagnose email deliverability or design consent, suppression, reliability and accessibility behavior. Not for routine SDK syntax."
 license: MIT
 metadata:
   author: Resend
@@ -17,27 +17,8 @@ metadata:
 
 Guidance for building deliverable, compliant, user-friendly emails.
 
-## Architecture Overview
-
-```
-[User] → [Email Form] → [Validation] → [Double Opt-In]
-                                              ↓
-                                    [Consent Recorded]
-                                              ↓
-[Suppression Check] ←──────────────[Ready to Send]
-        ↓
-[Idempotent Send + Retry] ──────→ [Email API]
-                                       ↓
-                              [Webhook Events]
-                                       ↓
-              ┌────────┬────────┬─────────────┐
-              ↓        ↓        ↓             ↓
-         Delivered  Bounced  Complained  Opened/Clicked
-                       ↓        ↓
-              [Suppression List Updated]
-                       ↓
-              [List Hygiene Jobs]
-```
+Read only the reference for the current concern. A contact form does not by itself
+need newsletter opt-in, campaign tracking, queues or list-management infrastructure.
 
 ## Quick Reference
 
